@@ -1,5 +1,6 @@
 from OpenGL.GL import *
 from OpenGL.GLUT import *
+from numpy import matrix
 
 from perspectives import *
 from transformations import *
@@ -13,8 +14,10 @@ KEY_W = 115
 KEY_A = 97
 KEY_S = 119
 KEY_D = 100
-KEY_Q = 113
-KEY_E = 101
+KEY_Q = 101
+KEY_E = 113
+WHEEL_UP = 3
+WHEEL_DOWN = 4
 KEY_ESC = 27
 
 TRANSLATION = {
@@ -49,17 +52,28 @@ def keyboard(key, x, y):
         TRANSLATION['x'] += -0.5
 
     if (key == KEY_Q):
-        ROTATION['angle'] += 10
+        ROTATION['angle'] += 5
         ROTATION['x'] = 0
         ROTATION['y'] = 1
         ROTATION['z'] = 0
 
     if (key == KEY_E):
-        ROTATION['angle'] -= 10
+        ROTATION['angle'] -= 5
         ROTATION['x'] = 0
         ROTATION['y'] = 1
         ROTATION['z'] = 0
 
+
+def SpecialKeys(key, x, y):
+    if (key == GLUT_KEY_UP):
+        TRANSLATION['z'] += 0.5
+    elif (key == GLUT_KEY_DOWN):
+        TRANSLATION['z'] -= 0.5
+
+    if (key == GLUT_KEY_RIGHT):
+        TRANSLATION['x'] -= 0.5
+    elif (key == GLUT_KEY_LEFT):
+        TRANSLATION['x'] += 0.5
 
 def mouse(button, state, x, y):
     if (button == GLUT_RIGHT_BUTTON):
@@ -71,6 +85,19 @@ def mouse(button, state, x, y):
         ROTATION['angle'] -= 5
         ROTATION['x'] = 1
         ROTATION['y'] = 0
+        ROTATION['z'] = 0
+
+    if (button == WHEEL_UP):
+        ROTATION['angle'] += 5
+        ROTATION['x'] = 0
+        ROTATION['y'] = 1
+        ROTATION['z'] = 0
+
+
+    if (button == WHEEL_DOWN):
+        ROTATION['angle'] -= 5
+        ROTATION['x'] = 0
+        ROTATION['y'] = 1
         ROTATION['z'] = 0
 
 def display():
@@ -95,24 +122,32 @@ def display():
     #            Chair(x*10,0,z*10)
     #mesa_foot(0,0,0)
     altura = 5
-    comprimento = 10
-    largura = 20
-
+    comprimento = 4
+    largura = 10
+    renderLight() 
+    Point()
+    Sala(0, 0.6, 0, 8)
     Chair(0,2.6-altura,-comprimento)
     Chair(5,2.6-altura,-comprimento)
     Chair(-5,2.6-altura,-comprimento)
-    glPushMatrix();
-    glRotatef(180, 0, 1, 0);
-    Chair(0,2.6-altura,-comprimento)
-    Chair(5,2.6-altura,-comprimento)
-    Chair(-5,2.6-altura,-comprimento)
-    glPopMatrix();
+    glPushMatrix()
+    rotate(180, 0, 1, 0)
+    Chair(0,1.6-altura,-comprimento)
+    Chair(5,1.6-altura,-comprimento)
+    Chair(-5,1.6-altura,-comprimento)
+    glPopMatrix()
     Mesa(0, 0, 0, largura, comprimento, altura)
+    Quadro(0, 1.85, -2, 4)
     #CubeGlut()
     #Cube(1, 0, 0)
     #Cube(-4, 0, 0)
-    #Triangle()    
+    #Triangle()   
+    rotate(90, 0, 1, 0)
+    Janela(0, 1, 4, 4)
+    Porta(-0.60, 0.16, -2.285, 7)
+    Janela(1.1, 1, -5.3, 3)
 
+    
     glPopMatrix()
 
     glFlush()
@@ -122,7 +157,6 @@ def reshape(width, height):
     glViewport(0, 0, width, height)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-
     # glOrtho(-1, 1, -1, 1, 1.0, 50)
     # ortho(-1, 1, -1, 1, 1.0, 50)
 
@@ -139,15 +173,14 @@ def main():
     glutInitWindowPosition(200, 200)
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
 
-    WINDOW = glutCreateWindow("RU ON OPENGL")
+    WINDOW = glutCreateWindow("SALA DE ESTUDOS ON OPENGL")
 
     glutDisplayFunc(display)
     glutIdleFunc(display)
     glutReshapeFunc(reshape)
-
     glutKeyboardFunc(keyboard)
     glutMouseFunc(mouse)
-
+    glutSpecialFunc(SpecialKeys)
     glutMainLoop()
 
 main()
