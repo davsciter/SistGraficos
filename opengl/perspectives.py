@@ -25,7 +25,6 @@ def frustum(left, right, bottom, top, near, far):
 
     glMultMatrixf(matrix)
 
-# https://lmb.informatik.uni-freiburg.de/people/reisert/opengl/doc/glOrtho.html
 def ortho(left, right, bottom, top, near, far):
     glLoadIdentity()
 

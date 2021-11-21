@@ -1,10 +1,14 @@
 from OpenGL.GL import *
 from OpenGL.GLUT import *
+from PIL.Image import ROTATE_180, ROTATE_90
 from numpy import matrix
+from tkinter import messagebox
 
 from perspectives import *
 from transformations import *
 from forms import *
+from lighting import *
+from breseham import *
 
 WINDOW_HEIGHT = Constant('WINDOW_HEIGHT', 600)
 WINDOW_WIDTH = Constant('WINDOW_WIDTH', 800)
@@ -42,14 +46,14 @@ def keyboard(key, x, y):
         glutDestroyWindow(glutGetWindow())
 
     if (key == KEY_W):
-        TRANSLATION['z'] += -0.5
+        TRANSLATION['z'] -= -0.5
     elif (key == KEY_S):
-        TRANSLATION['z'] += 0.5
+        TRANSLATION['z'] -= 0.5
 
     if (key == KEY_A):
-        TRANSLATION['x'] += 0.5
+        TRANSLATION['x'] -= 0.5
     elif (key == KEY_D):
-        TRANSLATION['x'] += -0.5
+        TRANSLATION['x'] -= -0.5
 
     if (key == KEY_Q):
         ROTATION['angle'] += 5
@@ -66,9 +70,9 @@ def keyboard(key, x, y):
 
 def SpecialKeys(key, x, y):
     if (key == GLUT_KEY_UP):
-        TRANSLATION['z'] += 0.5
-    elif (key == GLUT_KEY_DOWN):
         TRANSLATION['z'] -= 0.5
+    elif (key == GLUT_KEY_DOWN):
+        TRANSLATION['z'] += 0.5
 
     if (key == GLUT_KEY_RIGHT):
         TRANSLATION['x'] -= 0.5
@@ -103,7 +107,8 @@ def mouse(button, state, x, y):
 def display():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
-    glTranslatef(0, 0, -5)
+    glTranslatef(5, -10, -30)
+    rotate(165, 0, 1, 0)
 
     glShadeModel(GL_SMOOTH)
 
@@ -113,30 +118,25 @@ def display():
     translate(TRANSLATION['x'], TRANSLATION['y'], TRANSLATION['z'])
     # glRotatef(ROTATION['angle'], 0, 1, 0)
     rotate(ROTATION['angle'], ROTATION['x'], ROTATION['y'], ROTATION['z'])
-    # glScalef(1, 4, 1)
-    # scale(1, 4, 1)
 
-    #for cont in range(8):
-    #    for x in range(4):
-    #        for z in range (2):
-    #            Chair(x*10,0,z*10)
-    #mesa_foot(0,0,0)
     altura = 5
     comprimento = 4
     largura = 10
+    glPushMatrix()
     renderLight() 
     Point()
+    glPopMatrix()
+
     Sala(0, 0.6, 0, 8)
     Chair(0,2.6-altura,-comprimento)
     Chair(5,2.6-altura,-comprimento)
     Chair(-5,2.6-altura,-comprimento)
-    glPushMatrix()
+    
     rotate(180, 0, 1, 0)
     Chair(0,1.6-altura,-comprimento)
     Chair(5,1.6-altura,-comprimento)
     Chair(-5,1.6-altura,-comprimento)
-    glPopMatrix()
-    Mesa(0, 0, 0, largura, comprimento, altura)
+    Mesa(0, -1.6, 0, largura, comprimento, altura)
     Quadro(0, 1.85, -2, 4)
     #CubeGlut()
     #Cube(1, 0, 0)
@@ -144,8 +144,9 @@ def display():
     #Triangle()   
     rotate(90, 0, 1, 0)
     Janela(0, 1, 4, 4)
-    Porta(-0.60, 0.16, -2.285, 7)
     Janela(1.1, 1, -5.3, 3)
+    Porta(-0.60, 0, -2.285, 7)
+ 
 
     
     glPopMatrix()
@@ -167,6 +168,8 @@ def reshape(width, height):
 
 
 def main():
+    messagebox.showinfo(title='Controles', message='WASD / Setas (Cima, Baixo, Esquerda, Direita) para movimentar a perspectiva\n\nQ|E ou Scroll Up/Down Mouse para girar no eixo Y\n\nBotão Direito/Esquerdo Mouse para girar no eixo X')    
+
     glutInit()
 
     glutInitDisplayMode(GLUT_DEPTH | GLUT_RGBA)
