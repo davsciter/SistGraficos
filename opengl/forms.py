@@ -304,7 +304,7 @@ def Quadro(x=0, y=0, z=0, scale = 1):
 
 
     pos=[0,-8, 10]
-    devs = ['Davi Sena - 118314', 'Nicolas Bortoluzzi - 126659', 'Vinícius Oliveira - 129921']
+    devs = ['Davi Sena - 118314', 'Nicolas Bortoluzzi - 126659', 'Vinícius Ferreira - 129921']
     glColor(0, 0, 0)
 
     for j in devs:
