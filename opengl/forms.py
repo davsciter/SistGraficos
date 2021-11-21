@@ -303,12 +303,12 @@ def Quadro(x=0, y=0, z=0, scale = 1):
             glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, ord(i))  
 
 
-    pos=[-23,0]
-    devs = ['Davi Sena - 118314', 'Nicolas Bortoluzzi - ', 'Vinícius Oliveira - 129921']
+    pos=[0,-8, 10]
+    devs = ['Davi Sena - 118314', 'Nicolas Bortoluzzi - 126659', 'Vinícius Oliveira - 129921']
     glColor(0, 0, 0)
 
     for j in devs:
-        glRasterPos2f(pos[0], pos[1])
+        glRasterPos3f(pos[0], pos[1], pos[2])
         for i in j:
                 glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, ord(i))
         pos[1]-=2
